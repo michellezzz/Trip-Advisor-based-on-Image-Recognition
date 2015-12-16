@@ -8,6 +8,6 @@ for infile in os.listdir('./input'):
     #outfile = './output/%d.jpg' % num
     outfile = './output/' + infile
     im = Image.open('./input' + '/' + infile)
-    im.thumbnail((400, 400))
+    im.thumbnail((200, 200))
     im.save(outfile, im.format)
     num += 1

@@ -6,22 +6,32 @@ import cv2
 
 orb = cv2.ORB()
 
-def recommend_place(infile_list):
-    extract_query(infile_list)
-    os.system('''cp query.csv pig/''')
-    os.system('''rm query.csv''')
+
+def get_file_index():
+    index_file = open("file_index.csv")
+    index_file.readline()
+    index_file.readline()
+    file_index = dict()
+    for each_line in index_file:
+        each_line = each_line[0:-1].split('|')
+        file_index[each_line[0].strip()] = each_line[1]
+    return file_index
+
+
+
+def generate_vote():
     os.chdir("pig")
-    print "path"
     os.system('''pwd''')
     os.system('''rm -rf *.out''')
     os.system('''rm -rf pig.result''')
     os.system('''pig -x local match.py''')
 
-    good_pic = dict()
 
-    weight = [3,2,1]
+def count_vote():
+    weight = [3, 2, 1]
+    good_pic = dict()
     for i in range(20):
-        file_name = "part-m-%05d"%i
+        file_name = "part-m-%05d" % i
         file = open("pig.result/" + file_name, 'r')
         row = 0
         for each_line in file:
@@ -35,13 +45,22 @@ def recommend_place(infile_list):
             row += 1
 
     sorted_good_pic = sorted(good_pic.iteritems(), key=lambda d:d[1], reverse = True)
+    return sorted_good_pic  # list [(key1, value1),(key2, value2),...]
 
-    outfile = './static/'+str(sorted_good_pic[0][0]) + ".jpg"
-    message = "from server"
-    print outfile
+
+def search_place(infile_list, file_index, num_of_recommend):
+    extract_query(infile_list)
+    generate_vote()
+    sorted_good_pic = count_vote()
+
+    outfile_list = list()
+    for i in range(num_of_recommend):
+        outfile = file_index[str(sorted_good_pic[i][0])]
+        outfile_list.append(outfile)
+
     os.system('''rm -f query.csv''')
     os.chdir("..")
-    return outfile, message
+    return outfile_list
 
 
 def extract_query(infile_list):
@@ -49,7 +68,7 @@ def extract_query(infile_list):
     imageID = 0
     NUMBER_OF_TABLES = 20
     totalDescriptors = 0
-    f = open('query.csv', 'w')
+    f = open('./pig/query.csv', 'w')
     for file_name in infile_list:
 
         img = cv2.imread(file_name, 0)
@@ -76,6 +95,8 @@ def extract_query(infile_list):
 
 
 if __name__ == "__main__":
-    #extract_query()
-    (a,b)=recommend_place(['input/10.jpg', 'input/16.jpg'])
+    # extract_query()
+    (a, b) = recommend_place(['static/7.jpg', 'static/7.jpg'], get_file_index(), 3)
+    print a
     print b
+    #print get_file_index()
