@@ -1,6 +1,6 @@
-$def with(outfile_list, infile_list, flag)
+$def with(outfile_list, infile_list, history, flag)
 
-<html>
+<html xmlns="http://www.w3.org/1999/html">
     <head>
         <style>
             #header {
@@ -12,7 +12,7 @@ $def with(outfile_list, infile_list, flag)
             #nav {
                 line-height:30px;
                 background-color:#eeeeee;
-                height:300px;
+                height:500px;
                 width:100px;
                 float:left;
                 padding:5px;
@@ -39,9 +39,10 @@ $def with(outfile_list, infile_list, flag)
         </div>
 
         <div id="nav">
-            London<br>
-            Paris<br>
-            Tokyo
+            <header>History</header>
+                $for src in history:
+                    $src.split('/')[-1]
+                    <br/>
         </div>
 
         <div id="section">

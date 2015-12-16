@@ -23,14 +23,24 @@ def get_file_index():
     return file_index
 
 
+def get_history():
+    history = list()
+    for infile in os.listdir('./input'):
+        history.append(infile)
+    if len(history)>12:
+        return history[0:12]
+    return history
+
+
 class Upload:
 
     def GET(self):
         web.header("Content-Type", "text/html; charset=GB18030")
-        return render.upload('', '', -1)
+        return render.upload([], [], get_history(), -1)
 
     def POST(self):
         x = web.input(myfile={})
+        history = get_history()
         filedir = 'input'  # change this to the directory you want to store the file in.
         if 'myfile' in x:  # to check if the file-object is created
             filepath = x.myfile.filename.replace('\\', '/')  # replaces the windows-style slashes with linux ones.
@@ -45,9 +55,9 @@ class Upload:
                 outfile_list = search.search_place(infile_list, get_file_index(), 3)
                 #outfile_list = ["./static/foluolunsa.jpg", "./static/hude.jpg", "./static/zoo.jpg"]
                 del infile_list[:]
-                return render.upload(outfile_list, infile_list, 1)
+                return render.upload(outfile_list, infile_list, get_history(), 1)
             else:
-                return render.upload(['./static/more.jpg'], infile_list, 0)
+                return render.upload(['./static/more.jpg'], infile_list, get_history(), 0)
 
 
 if __name__ == "__main__":
