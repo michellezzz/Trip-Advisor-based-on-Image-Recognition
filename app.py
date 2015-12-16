@@ -27,7 +27,7 @@ def get_history():
     history = list()
     for infile in os.listdir('./input'):
         history.append(infile)
-    if len(history)>12:
+    if len(history) > 12:
         return history[0:12]
     return history
 

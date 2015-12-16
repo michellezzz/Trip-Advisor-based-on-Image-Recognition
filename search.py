@@ -4,8 +4,7 @@ import lsh
 import numpy
 import cv2
 
-orb = cv2.ORB()
-
+orb = cv2.ORB(100)
 
 def get_file_index():
     index_file = open("file_index.csv")

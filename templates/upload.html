@@ -13,7 +13,7 @@ $def with(outfile_list, infile_list, history, flag)
                 line-height:30px;
                 background-color:#eeeeee;
                 height:500px;
-                width:100px;
+                width:200px;
                 float:left;
                 padding:5px;
             }
@@ -46,6 +46,7 @@ $def with(outfile_list, infile_list, history, flag)
         </div>
 
         <div id="section">
+
             <form method="POST" enctype="multipart/form-data" action="">
             <input type="file" name="myfile" />
             <br/>
@@ -54,16 +55,23 @@ $def with(outfile_list, infile_list, history, flag)
 
             $if flag == 1:
                 <head>Hi, there are $len(outfile_list) places we recommend you to visit.</head>
+                <br/>
                 $for src in outfile_list:
                     <img src="$src" />
+                    <br/>
                     $src.split('/')[-1].split('.')[0]
+                    <br/>
             $if flag == 0:
                 <head>More picture please.</head>
+                <br/>
                 $for src in outfile_list:
                     <img src="$src" />
+                    <br/>
                 <head>Now we've only got: </head>
+                <br/>
                 $for src in infile_list:
                     $src.split('/')[-1]
+                    <br/>
 
 
         </div>
